@@ -13,7 +13,7 @@ export class UsersController {
         this.userService.create(body.email, body.password);
     }
 
-    @UseInterceptors(ClassSerializerInterceptor)
+    @UseInterceptors(ClassSerializerInterceptor) // exclude property
     @Get("/:id")
     async findUser(@Param("id") id: string) {
         const user = await this.userService.findOne(parseInt(id));

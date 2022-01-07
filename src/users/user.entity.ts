@@ -10,7 +10,7 @@ export class UserEntity {
     email: string;
 
     @Column()
-    @Exclude()
+    @Exclude() // exclude property
     password: string;
 
     @AfterInsert()
