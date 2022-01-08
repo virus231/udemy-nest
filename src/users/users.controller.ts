@@ -7,6 +7,7 @@ import {UserDto} from "./dtos/user.dto";
 
 
 @Controller('auth')
+@Serialize(UserDto)
 export class UsersController {
     constructor(private userService: UsersService) {}
 
@@ -15,7 +16,6 @@ export class UsersController {
         this.userService.create(body.email, body.password);
     }
 
-    @Serialize(UserDto) // exclude property
     @Get("/:id")
     async findUser(@Param("id") id: string) {
         console.log("handler is running");
