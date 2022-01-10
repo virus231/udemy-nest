@@ -14,7 +14,7 @@ export class AuthService {
         return !!localStorage.getItem('token');
     }
 
-    async signup(email: string, password: string) {
+    async signUp(email: string, password: string) {
         // See if email is in use
         const users = await this.repository.find(email);
         if (users.length) {
