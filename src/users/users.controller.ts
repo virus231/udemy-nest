@@ -19,6 +19,12 @@ export class UsersController {
         return await this.userService.findOne(session.userId);
     }
 
+    @Post("/signout")
+    async signOut(@Session() session: any) {
+        session.userId = null;
+        return {success: true};
+    }
+
     @Post("/signup")
     async createUser(@Body() body: CreateUserDto, @Session() session: any) {
         const user = await this.authService.signUp(body.email, body.password);
