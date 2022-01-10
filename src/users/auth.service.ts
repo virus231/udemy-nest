@@ -32,6 +32,6 @@ export class AuthService {
 
         // Save the user
         return this.repository.create(email, token);
-    }
+    };
 
 }
