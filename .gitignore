@@ -507,3 +507,7 @@ Temporary Items
 
 # DB
 db.sqlite
+
+# ENV
+.env.dev
+.env.test
