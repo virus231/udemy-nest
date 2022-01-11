@@ -5,6 +5,7 @@ import {UpdateUserDto} from "./dtos/update-user.dto";
 import {Serialize} from "../interceptors/serialize.interceptor";
 import {UserDto} from "./dtos/user.dto";
 import {AuthService} from "./auth.service";
+import {CurrentUser} from "./decorators/current-user.decorator";
 
 
 @Controller('auth')
@@ -15,7 +16,7 @@ export class UsersController {
     }
 
     @Get("/get-me")
-    async getMe(@Session() session: any) {
+    async getMe(@CurrentUser() session: any) {
         return await this.userService.findOne(session.userId);
     }
 
