@@ -9,6 +9,7 @@ import {
     Query,
     Delete,
     Session,
+    UseGuards
 } from '@nestjs/common';
 import {CreateUserDto} from "./dtos/create-user.dto";
 import {UsersService} from "./users.service";
@@ -18,6 +19,8 @@ import {UserDto} from "./dtos/user.dto";
 import {AuthService} from "./auth.service";
 import {CurrentUser} from "./decorators/current-user.decorator";
 import {UserEntity} from "./user.entity";
+import {AuthGuard} from "../guards/auth.guard";
+
 
 
 @Controller('auth')
@@ -28,27 +31,28 @@ export class UsersController {
     }
 
     @Get("/get-me")
+    @UseGuards(AuthGuard)
     getMe(@CurrentUser() user: UserEntity) {
         return user;
     }
 
     @Post("/signout")
     async signOut(@Session() session: any) {
-        session.userId = null;
+        session.id = null;
         return {success: true};
     }
 
     @Post("/signup")
     async createUser(@Body() body: CreateUserDto, @Session() session: any) {
         const user = await this.authService.signUp(body.email, body.password);
-        session.userId = user.id;
+        session.id = user.id;
         return user;
     }
 
     @Post("/signin")
     async signInUser(@Body() body: CreateUserDto, @Session() session: any) {
         const user = await this.authService.signIn(body.email, body.password);
-        session.userId = user.id;
+        session.id = user.id;
         return user;
     }
 
