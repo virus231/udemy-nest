@@ -22,7 +22,6 @@ import {ConfigModule, ConfigService} from "@nestjs/config";
                 entities: [UserEntity, ReportEntity],
                 synchronize: true,
             }),
-            imports: [ConfigService],
         }),
         // TypeOrmModule.forRoot({
         //     type: "sqlite",
