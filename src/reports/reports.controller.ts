@@ -7,7 +7,7 @@ import {AuthGuard} from "../guards/auth.guard";
 export class ReportsController {
     constructor(private readonly reportsService: ReportsService) {}
 
-    @Post()
+    @Post("/create")
     @UseGuards(AuthGuard)
     createReport(@Body() body: CreateReportDto) {
         return this.reportsService.create(body);
