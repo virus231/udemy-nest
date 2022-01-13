@@ -7,4 +7,22 @@ export class ReportEntity {
 
     @Column()
     price: number;
+
+    @Column()
+    company: string;
+
+    @Column()
+    model: string;
+
+    @Column()
+    year: number;
+
+    @Column()
+    longitude: number;
+
+    @Column()
+    latitude: number;
+
+    @Column()
+    mileage: number;
 }
