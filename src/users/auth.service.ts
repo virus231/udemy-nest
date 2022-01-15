@@ -1,54 +1,56 @@
-import {BadRequestException, Injectable, NotFoundException} from '@nestjs/common';
-import {UsersService} from './users.service';
-import {randomBytes, scrypt as _scrypt} from 'crypto';
-import {promisify} from "util";
+import {
+  Injectable,
+  BadRequestException,
+  NotFoundException,
+} from '@nestjs/common';
+import { UsersService } from './users.service';
+import { randomBytes, scrypt as _scrypt } from 'crypto';
+import { promisify } from 'util';
 
 const scrypt = promisify(_scrypt);
 
 @Injectable()
 export class AuthService {
-    constructor(private repository: UsersService) {
+  constructor(private usersService: UsersService) {}
+
+  async signup(email: string, password: string) {
+    // See if email is in use
+    const users = await this.usersService.find(email);
+    if (users.length) {
+      throw new BadRequestException('email in use');
     }
 
-    // public isAuthenticated(): boolean {
-    //     return !!localStorage.getItem('token');
-    // }
+    // Hash the users password
+    // Generate a salt
+    const salt = randomBytes(8).toString('hex');
 
-    async signUp(email: string, password: string) {
-        // See if email is in use
-        const users = await this.repository.find(email);
-        if (users.length) {
-            throw new BadRequestException('Email in use');
-        }
+    // Hash the salt and the password together
+    const hash = (await scrypt(password, salt, 32)) as Buffer;
 
-        // Hash the user password
-        const salt = randomBytes(8).toString('hex');
+    // Join the hashed result and the salt together
+    const result = salt + '.' + hash.toString('hex');
 
-        // Hash the salt and the password
-        const hashedPassword = (await scrypt(password, salt, 32)) as Buffer;
+    // Create a new user and save it
+    const user = await this.usersService.create(email, result);
 
-        // Join the hashed result with the salt
-        const token = `${salt}.${hashedPassword.toString('hex')}`;
+    // return the user
+    return user;
+  }
 
-        // Save the user
-        return this.repository.create(email, token);
-    };
-
-    async signIn(email: string, password: string) {
-        // Find the user
-        const [user] = await this.repository.find(email);
-        if (!user) {
-            throw new NotFoundException('User not found');
-        }
-        // Destruct salt and hashed password
-        const [salt, hashedPassword] = user.password.split('.');
-        // Hash the salt and the password
-        const hashedAttempt = (await scrypt(password, salt, 32)) as Buffer;
-        // Compare the hashed attempt with the hashed password
-        if (!hashedAttempt.equals(Buffer.from(hashedPassword, 'hex'))) {
-            throw new BadRequestException('Invalid password or email');
-        }
-        return user;
+  async signin(email: string, password: string) {
+    const [user] = await this.usersService.find(email);
+    if (!user) {
+      throw new NotFoundException('user not found');
     }
 
+    const [salt, storedHash] = user.password.split('.');
+
+    const hash = (await scrypt(password, salt, 32)) as Buffer;
+
+    if (storedHash !== hash.toString('hex')) {
+      throw new BadRequestException('bad password');
+    }
+
+    return user;
+  }
 }

@@ -1,45 +1,43 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { Repository } from "typeorm";
-import { InjectRepository } from "@nestjs/typeorm";
-import { UserEntity } from "./user.entity";
-
+import { Repository } from 'typeorm';
+import { InjectRepository } from '@nestjs/typeorm';
+import { User } from './user.entity';
 
 @Injectable()
 export class UsersService {
-    constructor(@InjectRepository(UserEntity) private repository: Repository<UserEntity>){}
+  constructor(@InjectRepository(User) private repo: Repository<User>) {}
 
-    create(email: string, password: string) {
-        const user = this.repository.create({email, password});
-        return this.repository.save(user);
+  create(email: string, password: string) {
+    const user = this.repo.create({ email, password });
+
+    return this.repo.save(user);
+  }
+
+  findOne(id: number) {
+    if (!id) {
+      return null;
     }
+    return this.repo.findOne(id);
+  }
 
-    findOne(id: number) {
-        if(!id) {
-            return null;
-        };
+  find(email: string) {
+    return this.repo.find({ email });
+  }
 
-        return this.repository.findOne(id);
+  async update(id: number, attrs: Partial<User>) {
+    const user = await this.findOne(id);
+    if (!user) {
+      throw new NotFoundException('user not found');
     }
+    Object.assign(user, attrs);
+    return this.repo.save(user);
+  }
 
-    find(email:string) {
-        return this.repository.find({email});
+  async remove(id: number) {
+    const user = await this.findOne(id);
+    if (!user) {
+      throw new NotFoundException('user not found');
     }
-
-    async updated(id: number, attrs: Partial<UserEntity>) {
-        const user =  await this.findOne(id);
-        if(!user) {
-            throw new NotFoundException("User not Found");
-        }
-        Object.assign(user,attrs);
-        return this.repository.save(user);
-    }
-
-    async remove(id: number) {
-        const user = await this.findOne(id);
-        if(!user) {
-            throw new NotFoundException("User not Found");
-        }
-        return this.repository.remove(user);
-    }
-
+    return this.repo.remove(user);
+  }
 }

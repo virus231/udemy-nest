@@ -1,32 +1,32 @@
-import { UserEntity } from "src/users/user.entity";
-import {Entity, Column, PrimaryGeneratedColumn, ManyToOne} from "typeorm";
+import { Entity, Column, PrimaryGeneratedColumn, ManyToOne } from 'typeorm';
+import { User } from '../users/user.entity';
 
 @Entity()
-export class ReportEntity {
-    @PrimaryGeneratedColumn()
-    id: number;
+export class Report {
+  @PrimaryGeneratedColumn()
+  id: number;
 
-    @Column()
-    price: number;
+  @Column()
+  price: number;
 
-    @Column()
-    company: string;
+  @Column()
+  make: string;
 
-    @Column()
-    model: string;
+  @Column()
+  model: string;
 
-    @Column()
-    year: number;
+  @Column()
+  year: number;
 
-    @Column()
-    longitude: number;
+  @Column()
+  lng: number;
 
-    @Column()
-    latitude: number;
+  @Column()
+  lat: number;
 
-    @Column()
-    mileage: number;
+  @Column()
+  mileage: number;
 
-    @ManyToOne(() => UserEntity, user => user.reports)
-    user: UserEntity;
+  @ManyToOne(() => User, (user) => user.reports)
+  user: User;
 }
