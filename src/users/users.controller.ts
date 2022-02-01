@@ -29,7 +29,7 @@ export class UsersController {
     private authService: AuthService,
   ) {}
 
-  @Get('/get-me')
+  @Get('/whoami')
   @UseGuards(AuthGuard)
   whoAmI(@CurrentUser() user: User) {
     return user;

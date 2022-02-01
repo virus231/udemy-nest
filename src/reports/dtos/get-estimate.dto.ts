@@ -4,10 +4,9 @@ import {
   Min,
   Max,
   IsLongitude,
-  IsLatitude
-} from "class-validator";
-import { Transform } from "class-transformer";
-
+  IsLatitude,
+} from 'class-validator';
+import { Transform } from 'class-transformer';
 
 export class GetEstimateDto {
   @IsString()

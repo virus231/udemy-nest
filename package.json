@@ -28,7 +28,7 @@
     "@nestjs/platform-express": "^7.6.15",
     "@nestjs/typeorm": "^7.1.5",
     "@types/cookie-session": "^2.0.42",
-    "class-transformer": "0.4.0",
+    "class-transformer": "^0.4.0",
     "class-validator": "^0.13.1",
     "cookie-session": "^1.4.0",
     "cross-env": "^7.0.3",
@@ -36,7 +36,7 @@
     "rimraf": "^3.0.2",
     "rxjs": "^6.6.6",
     "sqlite3": "^5.0.2",
-    "typeorm": "^0.3.0-alpha.24"
+    "typeorm": "^0.2.34"
   },
   "devDependencies": {
     "@nestjs/cli": "^7.6.0",
